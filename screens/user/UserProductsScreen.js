@@ -20,7 +20,7 @@ const UserProductsScreen = props => {
     Alert.alert("¿Estás seguro?", "¿Quieres retirar este articulo?", [
       { text: "No", style: "default" },
       {
-        text: "Claro",
+        text: "Retirar",
         style: "destructive",
         onPress: () => dispatch(productsActions.deleteProduct(id))
       }
