@@ -14,6 +14,7 @@ const orderReducer = (state = initialState, action) => {
         action.orderData.amount,
         new Date()
       );
+      action.redirect.navigate("ProductsOverview");
       return { ...state, orders: state.orders.concat(newOrder) };
     default:
       return state;
