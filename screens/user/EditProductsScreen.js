@@ -2,14 +2,14 @@ import React, { useEffect, useCallback, useReducer } from "react";
 import {
   View,
   ScrollView,
-  Text,
   StyleSheet,
-  TextInput,
   Platform,
-  Alert
+  Alert,
+  KeyboardAvoidingView
 } from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import HeaderButton from "../../components/UI/HeaderButton";
+import Input from "../../components/UI/Input";
 import { useSelector, useDispatch } from "react-redux";
 import * as productActions from "../../store/actions/products";
 
@@ -109,70 +109,78 @@ const EditProductScreen = props => {
     props.navigation.setParams({ submit: submitHandler });
   }, [submitHandler]);
 
-  const textChangeHandler = (inputIdentifier, text) => {
-    let isValid = false;
-    if (text.trim().length > 0) {
-      isValid = true;
-    }
-    dispatchFormState({
-      type: FORM_INPUT_UPDATE,
-      value: text,
-      isValid: isValid,
-      input: inputIdentifier
-    });
-  };
+  const inputChangedHandler = useCallback(
+    (inputIdentifier, inputValue, inputValididty) => {
+      dispatchFormState({
+        type: FORM_INPUT_UPDATE,
+        value: inputValue,
+        isValid: inputValididty,
+        input: inputIdentifier
+      });
+    },
+    [dispatchFormState]
+  );
 
   return (
-    <ScrollView>
-      <View style={styles.form}>
-        <View style={styles.formControl}>
-          <Text style={styles.label}>Título</Text>
-          <TextInput
-            style={styles.input}
-            value={formState.inputValues.title}
-            onChangeText={text => textChangeHandler("title", text)}
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior="padding"
+      keyboardVerticalOffset={100}
+    >
+      <ScrollView>
+        <View style={styles.form}>
+          <Input
+            id="title"
+            label="Titulo"
+            errorText="Por favor meta un titulo."
             autoCapitalize="words"
             returnKeyType="next"
+            onInputChange={inputChangedHandler}
+            initialValue={editedProduct ? editedProduct.title : ""}
+            initiallyValid={!!editedProduct}
+            required
           />
-        </View>
-        {!formState.inputValidities.title && (
-          <Text>Por favor, meta un titulo.</Text>
-        )}
 
-        <View style={styles.formControl}>
-          <Text style={styles.label}>URL de la imagen</Text>
-          <TextInput
-            style={styles.input}
-            value={formState.inputValues.imageUrl}
-            onChangeText={text => textChangeHandler("imageUrl", text)}
-            autoCorrect={false}
+          <Input
+            id="imageUrl"
+            label="URL de la imagen"
+            errorText="Por favor ingrese una url valida."
             returnKeyType="next"
+            onInputChange={inputChangedHandler}
+            initialValue={editedProduct ? editedProduct.imageUrl : ""}
+            initiallyValid={!!editedProduct}
+            required
           />
-        </View>
 
-        {editedProduct ? null : (
-          <View style={styles.formControl}>
-            <Text style={styles.label}>Precio</Text>
-            <TextInput
-              style={styles.input}
-              value={formState.inputValues.price}
-              onChangeText={text => textChangeHandler("price", text)}
-              keyboardType="numeric"
+          {editedProduct ? null : (
+            <Input
+              id="price"
+              label="Precio"
+              errorText="Por favor ingrese un precio valido."
               returnKeyType="next"
+              keyboardType="decimal-pad"
+              onInputChange={inputChangedHandler}
+              required
+              min={0.01}
             />
-          </View>
-        )}
+          )}
 
-        <View style={styles.formControl}>
-          <Text style={styles.label}>Descripción</Text>
-          <TextInput
-            style={styles.input}
-            value={formState.inputValues.description}
-            onChangeText={text => textChangeHandler("description", text)}
+          <Input
+            id="description"
+            label="Descripción"
+            errorText="Por favor agregue una descripción del producto más que 5 caracteres."
+            autoCapitalize="sentences"
+            multiline
+            numberOfLines={3}
+            initialValue={editedProduct ? editedProduct.description : ""}
+            initiallyValid={!!editedProduct}
+            onInputChange={inputChangedHandler}
+            required
+            minLength={5}
           />
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -199,19 +207,6 @@ EditProductScreen.navigationOptions = navData => {
 const styles = StyleSheet.create({
   form: {
     margin: 20
-  },
-  formControl: {
-    width: "100%"
-  },
-  label: {
-    fontFamily: "open-sans-bold",
-    marginVertical: 8
-  },
-  input: {
-    paddingHorizontal: 2,
-    paddingVertical: 5,
-    borderBottomColor: "#ccc",
-    borderBottomWidth: 1
   }
 });
 
