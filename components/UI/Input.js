@@ -56,14 +56,9 @@ const Input = props => {
       isValid = false;
     }
     dispatch({ type: INPUT_CHANGE, value: text, isValid: isValid });
-    console.log("[Input.js]...textChangedHandler fired");
-    console.log("[Input.js]...input = ", id);
-    console.log("[Input.js]...isValid = ", isValid);
   };
 
   const lostFocusHandler = () => {
-    console.log("[Input.js]...firing lostFocusHandler");
-    console.log();
     dispatch({ type: INPUT_BLUR });
   };
 

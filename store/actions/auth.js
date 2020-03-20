@@ -41,7 +41,6 @@ export const signUp = (email, password) => {
         } else if (errorId === "TOO_MANY_ATTEMPTS_TRY_LATER") {
           message = "Por favor espera un momento y reintentarlo luego";
         }
-        console.log("errorId = ", errorId);
         throw new Error(message);
       }
     }

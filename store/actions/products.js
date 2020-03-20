@@ -5,7 +5,6 @@ export const SET_PRODUCTS = "SET_PRODUCTS";
 import Product from "../../models/product";
 
 export const fetchProducts = () => {
-  console.log("[actions/products]...firing");
   return async (dispatch, getState) => {
     const userId = getState().auth.userId;
     try {
@@ -35,9 +34,7 @@ export const fetchProducts = () => {
         products: loadedProducts,
         userProducts: loadedProducts.filter(prod => prod.ownerId === userId)
       });
-      console.log("[actions/products]...loadedProducts = ", loadedProducts);
     } catch (err) {
-      console.log("[actions/products]...catching error...err = ", err);
       throw err;
     }
   };

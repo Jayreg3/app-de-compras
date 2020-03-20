@@ -66,7 +66,6 @@ const AuthScreen = props => {
   }, [error]);
 
   const authHandler = async () => {
-    console.log("[AuthScreen]...authHandler firing");
     let action;
     if (isSignUp) {
       action = authActions.signUp(
