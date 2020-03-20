@@ -4,10 +4,11 @@ export const SET_ORDERS = "SET_ORDERS";
 import Order from "../../models/order";
 
 export const fetchOrders = () => {
-  return async dispatch => {
+  return async (dispatch, getState) => {
+    const userId = getState().auth.userId;
     try {
       const response = await fetch(
-        "https://app-de-compras-a3fa8.firebaseio.com/orders/u1.json"
+        `https://app-de-compras-a3fa8.firebaseio.com/orders/${userId}.json`
       );
       if (!response.ok) {
         throw new Error("Se ha producido un error.");
@@ -35,10 +36,12 @@ export const fetchOrders = () => {
 };
 
 export const addOrder = (cartItems, totalAmount, redirect) => {
-  return async dispatch => {
+  return async (dispatch, getState) => {
+    const token = getState().auth.token;
+    const userId = getState().auth.userId;
     const date = new Date();
     const response = await fetch(
-      "https://app-de-compras-a3fa8.firebaseio.com/orders/u1.json",
+      `https://app-de-compras-a3fa8.firebaseio.com/orders/${userId}.json?auth=${token}`,
       {
         method: "POST",
         headers: {

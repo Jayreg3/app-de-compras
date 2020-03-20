@@ -22,6 +22,7 @@ const ProductOverviewScreen = props => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState();
   const products = useSelector(state => state.products.availableProducts);
+  console.log("[ProductOverviewScreen]...products = ", products);
   const dispatch = useDispatch();
 
   const loadProducts = useCallback(async () => {

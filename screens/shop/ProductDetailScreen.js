@@ -39,8 +39,9 @@ const ProductDetailScreen = props => {
 };
 
 ProductDetailScreen.navigationOptions = navData => {
+  title = navData.navigation.getParam("productTitle");
   return {
-    headerTitle: navData.navigation.getParam("productTitle"),
+    headerTitle: title.length > 27 ? title.substring(0, 27) + "..." : title,
     headerRight: (
       <HeaderButtons HeaderButtonComponent={HeaderButton}>
         <Item
